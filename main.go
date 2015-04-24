@@ -17,6 +17,7 @@ import (
 var (
 	props          properties.Properties
 	propertiesFile = flag.String("config", "mora.properties", "the configuration file")
+	port = flag.Int("port", nil, "the port to bind")
 
 	SwaggerPath string
 	MoraIcon    string
@@ -61,7 +62,13 @@ func main() {
 		statistics.Register(sessMng, restful.DefaultContainer)
 	}
 
-	basePath := "http://" + props["http.server.host"] + ":" + props["http.server.port"]
+	bindPort = props["http.server.port"];
+
+	if port {
+		bindPort = port
+	}
+
+	basePath := "http://" + props["http.server.host"] + ":" + bindPort
 
 	// Register Swagger UI
 	swagger.InstallSwaggerService(swagger.Config{
@@ -81,7 +88,7 @@ func main() {
 	http.HandleFunc("/favion.ico", icon)
 
 	info("ready to serve on %s", basePath)
-	log.Fatal(http.ListenAndServe(props["http.server.host"]+":"+props["http.server.port"], nil))
+	log.Fatal(http.ListenAndServe(props["http.server.host"]+":"+bindPort, nil))
 }
 
 // If swagger is not on `/` redirect to it
