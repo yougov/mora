@@ -17,7 +17,7 @@ import (
 var (
 	props          properties.Properties
 	propertiesFile = flag.String("config", "mora.properties", "the configuration file")
-	port = flag.Int("port", nil, "the port to bind")
+	port = flag.Int("port", -1, "the port to bind")
 
 	SwaggerPath string
 	MoraIcon    string
@@ -62,9 +62,10 @@ func main() {
 		statistics.Register(sessMng, restful.DefaultContainer)
 	}
 
-	bindPort = props["http.server.port"];
+	var bindPort int
+	bindPort = props["http.server.port"]
 
-	if port {
+	if port != -1 {
 		bindPort = port
 	}
 
