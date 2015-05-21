@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"github.com/emicklei/go-restful"
 	"github.com/emicklei/go-restful/swagger"
@@ -66,7 +67,7 @@ func main() {
 	bindPort = props["http.server.port"]
 
 	if port != -1 {
-		bindPort = port
+		bindPort = strconv.Itoa(port)
 	}
 
 	basePath := "http://" + props["http.server.host"] + ":" + bindPort
